@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: protobuf
-# Recipe:: default
+# Cookbook Name:: walletserver
+# Recipe:: install_protobuf
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-log "Install Google Performance Tools into #{node[:walletserver][:root]}"
+log "Install Google Protocol Buffers into #{node[:walletserver][:root]}"
 
   directory "#{node[:walletserver][:root]}/build/protobuf" do
     owner node[:walletserver][:daemon][:user]

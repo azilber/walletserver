@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: boost
-# Recipe:: default
+# Cookbook Name:: walletserver
+# Recipe:: install_boost
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-log "Install Google Performance Tools into #{node[:walletserver][:root]}"
+log "Install BOOST Tools into #{node[:walletserver][:root]}"
 
   directory "#{node[:walletserver][:root]}/build/boost" do
     owner node[:walletserver][:daemon][:user]

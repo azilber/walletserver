@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: bdb
-# Recipe:: default
+# Cookbook Name:: walletserver
+# Recipe:: install_bdb
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-log "Install Google Performance Tools into #{node[:walletserver][:root]}"
+log "Install Oracle BDB 4.8 into #{node[:walletserver][:root]}"
 
   directory "#{node[:walletserver][:root]}/build/bdb" do
     owner node[:walletserver][:daemon][:user]

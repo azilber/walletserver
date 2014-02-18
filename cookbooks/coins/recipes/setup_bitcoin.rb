@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: walletserver
-# Recipe:: install_python3
+# Cookbook Name:: coins
+# Recipe:: bitcoin
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,43 +17,56 @@
 # limitations under the License.
 #
 
-log "Install Python 3 into #{node[:walletserver][:root]}"
+log "Install #{node into #{node[:walletserver][:root]}"
 
-  directory "#{node[:walletserver][:root]}/build/python3" do
+  include_attribute "coins::bitcoin"
+
+  directory "#{node[:walletserver][:root]}/build/bitcoin" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/python3.tar.gz" do
-         source node[:walletserver][:python3][:source_file]
+  remote_file "#{Chef::Config[:file_cache_path]}/bitcoin.tar.gz" do
+         source node[:coins][:bitcoin][:source]
          mode "0755"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[install_python3]', :immediately
-         notifies :run, 'bash[ldconfig_walletserver]', :immediately
-         notifies :run, 'bash[install_python3pyp]', :immediately
+         notifies :run, 'bash[install_bitcoin]', :immediately
+         notifies :run, 'bash[config_bitcoin]', :immediately
+         notifies :run, 'bash[monit_bitcoin]', :immediately
+         notifies :run, 'bash[monit_reload]', :immediately
   end
 
-  bash "install_python3" do
+  bash "install_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
       export LDFLAGS="-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
 
       export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
 
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/python3.tar.gz -C #{node[:walletserver][:root]}/build/python3/
-      (cd #{node[:walletserver][:root]}/build/python3  && ./configure --prefix=#{node[:walletserver][:root]} --enable-shared --without-universal-archs && make altinstall)
+      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/bitcoin.tar.gz -C #{node[:walletserver][:root]}/build/bitcoin/
+      (cd #{node[:walletserver][:root]}/build/bitcoin  && ./configure --prefix=#{node[:walletserver][:root]} )
+
+     mv #{node[:walletserver][:root]}/src/#{#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing
   end
 
-  bash "install_python3pyp" do
+  bash "config_bitcoin do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
 
-    curl https://raw.github.com/pypa/pip/master/contrib/get-pip.py | #{node[:walletserver][:root]}/bin/python3.3 -
     EOH
     action :nothing
   end
+
+  bash "monit_bitcoin do
+    user "#{node[:walletserver][:daemon][:user]}"
+    code <<-EOH
+
+    EOH
+    action :nothing
+  end
+

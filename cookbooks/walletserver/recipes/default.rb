@@ -94,3 +94,9 @@ Log "Install Wallet Server..."
     action :nothing
   end
 
+  execute "monit_reload" do
+      command "monit reload"
+      action :nothing
+  end
+   
+

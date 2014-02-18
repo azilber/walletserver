@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: openssl
-# Recipe:: default
+# Cookbook Name:: walletserver
+# Recipe:: install_openssl
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-log "Install Google Performance Tools into #{node[:walletserver][:root]}"
+log "Install openssl into #{node[:walletserver][:root]}"
 
   directory "#{node[:walletserver][:root]}/build/openssl" do
     owner node[:walletserver][:daemon][:user]
