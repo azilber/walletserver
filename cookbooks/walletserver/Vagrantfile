@@ -104,9 +104,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe "walletserver"
     chef.add_recipe "walletserver::install_gperf"
     chef.add_recipe "walletserver::install_openssl"
+    #chef.add_recipe "walletserver::install_leveldb"
     chef.add_recipe "walletserver::install_protobuf"
     chef.add_recipe "walletserver::install_bdb"
     chef.add_recipe "walletserver::install_python3"
+    chef.add_recipe "walletserver::install_boost"
+    chef.add_recipe "coins::setup_bitcoin"
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,

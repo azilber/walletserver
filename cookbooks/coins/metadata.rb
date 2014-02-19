@@ -9,4 +9,4 @@ version          '0.1.0'
 depends "walletserver"
 
 recipe "default", "Sets up and preps for coin installs"
-recipe "install_bitcoin", "Installs bitcoind"
+recipe "setup_bitcoin", "Installs bitcoind"

@@ -17,9 +17,10 @@
 # limitations under the License.
 #
 
-log "Install #{node into #{node[:walletserver][:root]}"
+#  include_attribute "coins::bitcoin"
 
-  include_attribute "coins::bitcoin"
+log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:root]}"
+
 
   directory "#{node[:walletserver][:root]}/build/bitcoin" do
     owner node[:walletserver][:daemon][:user]
@@ -27,46 +28,57 @@ log "Install #{node into #{node[:walletserver][:root]}"
     recursive true
   end
 
+  template "#{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix" do
+    source "makefile.bitcoin.unix.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    mode 0644
+  end
+    
+
   remote_file "#{Chef::Config[:file_cache_path]}/bitcoin.tar.gz" do
          source node[:coins][:bitcoin][:source]
-         mode "0755"
+         mode "0644"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[install_bitcoin]', :immediately
+         notifies :run, 'bash[setup_bitcoin]', :immediately
          notifies :run, 'bash[config_bitcoin]', :immediately
          notifies :run, 'bash[monit_bitcoin]', :immediately
-         notifies :run, 'bash[monit_reload]', :immediately
+         notifies :run, 'execute[monit_reload]', :immediately
   end
 
-  bash "install_bitcoin" do
+  bash "setup_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
+      export LDFLAGS="#{node[:walletserver][:ldflags]}"
 
-      export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
+      export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/bitcoin.tar.gz -C #{node[:walletserver][:root]}/build/bitcoin/
-      (cd #{node[:walletserver][:root]}/build/bitcoin  && ./configure --prefix=#{node[:walletserver][:root]} )
+      (cd #{node[:walletserver][:root]}/build/bitcoin/src/src  && make -f #{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix )
 
-     mv #{node[:walletserver][:root]}/src/#{#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      strip #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]}
+
+      mv -f #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing
   end
 
-  bash "config_bitcoin do
+  bash "config_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
 
+    echo "config btc"
     EOH
     action :nothing
   end
 
-  bash "monit_bitcoin do
+  bash "monit_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-
+    
+    echo "monit btc"
     EOH
     action :nothing
   end
-

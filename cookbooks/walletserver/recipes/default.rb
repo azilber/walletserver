@@ -35,7 +35,7 @@ pversion = node['platform_version'].split('.').first
 
        node.default['yum']['epel']['enabled'] = true
        include_recipe 'yum-epel'
-       %w{gcc-c++ git autoconf automake monit libunwind libunwind-devel zlib-devel tcl tcl-devel nasm boost boost-devel boost-openmpi openmpi-devel leveldb leveldb-devel}.each do |pkg|
+       %w{gcc-c++ gcc-x86_64-linux-gnu git autoconf automake icu monit libunwind libunwind-devel zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
          package pkg do
            action :install
          end
@@ -94,9 +94,15 @@ Log "Install Wallet Server..."
     action :nothing
   end
 
+  service "monit" do
+     supports :status => true, :restart => true, :reload => true
+     action [ :enable, :start ]
+   end
+
   execute "monit_reload" do
       command "monit reload"
       action :nothing
   end
    
-
+node.default[:walletserver][:ldflags] = "-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
+node.default[:walletserver][:cppflags] = "-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
