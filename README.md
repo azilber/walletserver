@@ -52,7 +52,11 @@ bitcoind builds
 
 
 Donations:
+
+
 BTC: 1KogumaB8gTZBNM5NFCyG1cMx9k2hb7NNA
 DVC: 12VfaJToeCxRAU36bWfehBBooLeBaKx4tP 
 LTC: LT56PMhz16szVk3RFGB9ASfuYtQJuSRS8p
 TES: 5pVjo5M1rZRqGatTXefT6dVTKP1zo66nBS
+
+
