@@ -44,6 +44,7 @@ Not all recipes are needed by all coins.  The usual critical ones (for Bitcoin o
 bitcoind builds
 
 **TODO**
+
 1. Fix leveldb build
 2. Move all compile flags to attributes
 3. Setup coin configs
