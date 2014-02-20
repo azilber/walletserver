@@ -5,7 +5,7 @@ Chef (and Vagrant) code to deploy and control crypto-currency wallets.
 
 This code is aimed to be part of a larger crypto exchange.  The current target is to:
 
-1. Deploye coin(s) and monitoring system on wallet server.
+1. Deploy coin(s) and monitoring system on wallet server.
 2. Deploy an ember.js restful interface to coin RPC.
 3. Setup business logic and tracking/logging for the restful service.
 
