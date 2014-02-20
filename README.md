@@ -3,6 +3,14 @@ walletserver
 
 Chef (and Vagrant) code to deploy and control crypto-currency wallets.
 
+This code is aimed to be part of a larger crypto exchange.  The current target is to:
+
+1. Deploye coin(s) and monitoring system on wallet server.
+2. Deploy an ember.js restful interface to coin RPC.
+3. Setup business logic and tracking/logging for the restful service.
+
+
+
 Init sub-modules first, update, then use Vagrant for testing.  See the sample Vagrantfle
 in walletserver cookbook directory.
 
@@ -29,3 +37,14 @@ Not all recipes are needed by all coins.  The usual critical ones (for Bitcoin o
 *Why gperf?*
 
   I've setup a dependency on the Google Performance Tools for all coins.  This is a hard dependency, but can be removed easily by removing the build references.
+
+
+*Progress*
+
+bitcoind builds
+
+*TODO*
+1. Fix leveldb build
+2. Move all compile flags to attributes
+3. Setup coin configs
+4. Setup monit for coins.
