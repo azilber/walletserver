@@ -34,17 +34,24 @@ Not all recipes are needed by all coins.  The usual critical ones (for Bitcoin o
     chef.add_recipe "walletserver::install_bdb"
 `
 
-*Why gperf?*
+**Why gperf?**
 
   I've setup a dependency on the Google Performance Tools for all coins.  This is a hard dependency, but can be removed easily by removing the build references.
 
 
-*Progress*
+**Progress**
 
 bitcoind builds
 
-*TODO*
+**TODO**
 1. Fix leveldb build
 2. Move all compile flags to attributes
 3. Setup coin configs
 4. Setup monit for coins.
+
+
+Donations:
+BTC: 1KogumaB8gTZBNM5NFCyG1cMx9k2hb7NNA
+DVC: 12VfaJToeCxRAU36bWfehBBooLeBaKx4tP 
+LTC: LT56PMhz16szVk3RFGB9ASfuYtQJuSRS8p
+TES: 5pVjo5M1rZRqGatTXefT6dVTKP1zo66nBS
