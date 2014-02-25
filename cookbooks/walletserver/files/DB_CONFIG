@@ -1,2 +1,0 @@
-set_lg_dir database
-set_lk_max_locks 40000
