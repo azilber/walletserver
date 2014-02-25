@@ -35,7 +35,7 @@ pversion = node['platform_version'].split('.').first
 
        node.default['yum']['epel']['enabled'] = true
        include_recipe 'yum-epel'
-       %w{gcc-c++ gcc-x86_64-linux-gnu git autoconf automake icu monit libunwind libunwind-devel zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
+       %w{gcc-c++ gcc-x86_64-linux-gnu autoconf automake icu monit libunwind libunwind-devel zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
          package pkg do
            action :install
          end
@@ -73,17 +73,13 @@ Log "Install Wallet Server..."
     recursive true
   end
 
-  directory "#{node[:walletserver][:root]}/daemons" do
-    owner node[:walletserver][:daemon][:user]
-    group node[:walletserver][:daemon][:group]
-    recursive true
-  end
-  
-  directory "#{node[:walletserver][:root]}/build" do
-    owner node[:walletserver][:daemon][:user]
-    group node[:walletserver][:daemon][:group]
-    recursive true
-  end
+  %w{daemons build configs run control data}.each do |cdir|
+      directory "#{node[:walletserver][:root]}/#{cdir}" do
+         owner node[:walletserver][:daemon][:user]
+         group node[:walletserver][:daemon][:group]
+         recursive true
+      end
+   end
 
   bash "ldconfig_walletserver" do
    user "root"
@@ -94,14 +90,25 @@ Log "Install Wallet Server..."
     action :nothing
   end
 
+  cookbook_file "/etc/monit.d/status.conf" do
+    source "monit_status.conf"
+    owner "root"
+    group node[:walletserver][:daemon][:group]
+    mode 0644
+    action :create
+  end
+
   service "monit" do
      supports :status => true, :restart => true, :reload => true
      action [ :enable, :start ]
    end
 
-  execute "monit_reload" do
-      command "monit reload"
-      action :nothing
+  template "/etc/logrotate.d/coins" do
+    source "logrotate-coins.erb"
+    owner "root"
+    group node[:walletserver][:daemon][:group]
+    mode 0644
+    action :create
   end
    
 node.default[:walletserver][:ldflags] = "-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"

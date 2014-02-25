@@ -10,14 +10,14 @@ depends "yum"
 depends "yum-epel"
 depends "apt"
 
-recipe "default", "Sets up and installs the wallet server"
-recipe "install_gperf", "Installs the Google Performance tools"
-recipe "install_openssl", "Installs openssl"
-recipe "install_bdb", "Installs Berkeley DB 4.8"
-recipe "install_leveldb", "Installs Google LevelDB"
-recipe "install_protobuf", "Installs Google Protocol Buffers"
-recipe "install_boost", "Installs BOOST C++ libraries"
-recipe "install_python3", "Installs Python 3.x"
+recipe "walletserver::default", "Sets up and installs the wallet server"
+recipe "walletserver::install_gperf", "Installs the Google Performance tools"
+recipe "walletserver::install_openssl", "Installs openssl"
+recipe "walletserver::install_bdb", "Installs Berkeley DB 4.8"
+recipe "walletserver::install_leveldb", "Installs Google LevelDB"
+recipe "walletserver::install_protobuf", "Installs Google Protocol Buffers"
+recipe "walletserver::install_boost", "Installs BOOST C++ libraries"
+recipe "walletserver::install_python3", "Installs Python 3.x"
 
 attribute 'walletserver/root',
  :display_name => "Root of the wallet server",

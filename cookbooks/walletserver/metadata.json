@@ -42,14 +42,14 @@
   "groupings": {
   },
   "recipes": {
-    "default": "Sets up and installs the wallet server",
-    "install_gperf": "Installs the Google Performance tools",
-    "install_openssl": "Installs openssl",
-    "install_bdb": "Installs Berkeley DB 4.8",
-    "install_leveldb": "Installs Google LevelDB",
-    "install_protobuf": "Installs Google Protocol Buffers",
-    "install_boost": "Installs BOOST C++ libraries",
-    "install_python3": "Installs Python 3.x"
+    "walletserver::default": "Sets up and installs the wallet server",
+    "walletserver::install_gperf": "Installs the Google Performance tools",
+    "walletserver::install_openssl": "Installs openssl",
+    "walletserver::install_bdb": "Installs Berkeley DB 4.8",
+    "walletserver::install_leveldb": "Installs Google LevelDB",
+    "walletserver::install_protobuf": "Installs Google Protocol Buffers",
+    "walletserver::install_boost": "Installs BOOST C++ libraries",
+    "walletserver::install_python3": "Installs Python 3.x"
   },
   "version": "0.1.0"
 }

@@ -1,6 +1,7 @@
 default[:walletserver][:root] = "/opt/coins"
 default[:walletserver][:daemon][:user] = "coins"
 default[:walletserver][:daemon][:group] = "coins"
+default[:walletserver][:alert][:email] = "walletserver@mailtothis.com"
 default[:walletserver][:gperf][:source_file] = 'https://gperftools.googlecode.com/files/gperftools-2.1.tar.gz'
 #default[:walletserver][:openssl][:source_file] = 'http://www.openssl.org/source/openssl-1.0.1f.tar.gz'
 default[:walletserver][:openssl][:source_file] = 'http://ftp.nluug.nl/security/openssl/openssl-1.0.1f.tar.gz'

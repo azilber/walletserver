@@ -1,0 +1,8 @@
+check process <%= @procname %> with pidfile <%= @coinroot %>/run/<%= @procname %>.pid
+   start program = "<%= @coinroot %>/control/start-<%= @procname %>"
+	as uid <%= @coinuser %> and gid <%= @coingroup %>
+   stop program = "<%= @coinroot %>/control/stop-<%= @procname %>"
+	as uid root
+   if failed host 127.0.0.1 port <%= @rpcport %> for 10 cycles then restart
+   if 5 restarts within 50 cycles then timeout
+group coins

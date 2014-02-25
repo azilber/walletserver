@@ -1,0 +1,9 @@
+<%= node[:walletserver][:root] %>/data/*/debug.log {
+    notifempty
+    missingok
+    daily
+    copytruncate
+    rotate 3
+    size=10M
+    compress
+}

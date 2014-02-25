@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: coins
-# Recipe:: setup_bitcoin
+# Recipe:: setup_generic
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -17,55 +17,53 @@
 # limitations under the License.
 #
 
-#  include_attribute "coins::bitcoin"
-
-log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:root]}"
+log "Attempt to install a generic coin into #{node[:walletserver][:root]}"
 
 
-  directory "#{node[:walletserver][:root]}/build/bitcoin" do
+  directory "#{node[:walletserver][:root]}/build/generic" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  template "#{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix" do
-    source "makefile.bitcoin.unix.erb"
+  template "#{node[:walletserver][:root]}/build/generic/makefile.generic.unix" do
+    source "makefile.generic.unix.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     mode 0644
   end
     
 
-  remote_file "#{Chef::Config[:file_cache_path]}/bitcoin.tar.gz" do
-         source node[:coins][:bitcoin][:source]
+  remote_file "#{Chef::Config[:file_cache_path]}/generic.tar.gz" do
+         source node[:coins][:generic][:source]
          mode "0644"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[setup_bitcoin]', :immediately
-         notifies :run, 'bash[config_bitcoin]', :immediately
-         notifies :run, 'bash[monit_bitcoin]', :immediately
+         notifies :run, 'bash[setup_generic]', :immediately
+         notifies :run, 'bash[config_generic]', :immediately
+         notifies :run, 'bash[monit_generic]', :immediately
          notifies :run, 'execute[monit_reload]', :immediately
   end
 
-  bash "setup_bitcoin" do
+  bash "setup_generic" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
       export LDFLAGS="#{node[:walletserver][:ldflags]}"
 
       export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/bitcoin.tar.gz -C #{node[:walletserver][:root]}/build/bitcoin/
-      (cd #{node[:walletserver][:root]}/build/bitcoin/src/src  && make -f #{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix )
+      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/generic.tar.gz -C #{node[:walletserver][:root]}/build/generic/
+      (cd #{node[:walletserver][:root]}/build/generic/src/src  && make -f #{node[:walletserver][:root]}/build/generic/makefile.generic.unix )
 
-      strip #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]}
+      strip #{node[:walletserver][:root]}/build/generic/src/src/#{node[:coins][:generic][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/generic/src/src/#{node[:coins][:generic][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing
   end
 
-  bash "config_bitcoin" do
+  bash "config_generic" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
 
@@ -74,7 +72,7 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
     action :nothing
   end
 
-  bash "monit_bitcoin" do
+  bash "monit_generic" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
     

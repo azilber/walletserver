@@ -1,5 +1,6 @@
-metadata.json
+cookbooks/walletserver/metadata.json
+cookbooks/coins/metadata.json
 cookbooks/apt/
 cookbooks/yum/
 cookbooks/yum-epel/
-.vagrant
+cookbooks/walletserver/.vagrant/*

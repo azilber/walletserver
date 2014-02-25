@@ -42,7 +42,10 @@ log "Install LevelDB into #{node[:walletserver][:root]}"
       export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/boost -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/leveldb.tar.gz -C #{node[:walletserver][:root]}/build/leveldb/
-      (cd #{node[:walletserver][:root]}/build/leveldb/  && ./configure --prefix=#{node[:walletserver][:root]} && make && make install)
+      (cd #{node[:walletserver][:root]}/build/leveldb/  && make)
+
+      mv -b #{node[:walletserver][:root]}/build/leveldb/liblevel*.{so,a}* #{node[:walletserver][:root]}/lib/
+
     EOH
     action :nothing
   end
