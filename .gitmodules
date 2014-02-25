@@ -7,3 +7,6 @@
 [submodule "cookbooks/yum-epel"]
 	path = cookbooks/yum-epel
 	url = https://github.com/opscode-cookbooks/yum-epel.git
+[submodule "cookbooks/s3_file"]
+	path = cookbooks/s3_file
+	url = git@github.com:azilber/s3_file.git

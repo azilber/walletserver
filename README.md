@@ -6,32 +6,37 @@ Chef (and Vagrant) code to deploy and control crypto-currency wallets.
 This code is aimed to be part of a larger crypto exchange.  The current target is to:
 
 1. Deploy coin(s) and monitoring system on wallet server.
-2. Deploy an ember.js restful interface to coin RPC.
+2. Deploy backbone.js restful interface to coin RPC.
 3. Setup business logic and tracking/logging for the restful service.
 
 
 
 Init sub-modules first, update, then use Vagrant for testing.  See the sample Vagrantfle
-in walletserver cookbook directory.
+in walletserver cookbook directory for vbox source and example.
 
 **Recipes**
 `
-    chef.add_recipe "walletserver"
-    chef.add_recipe "walletserver::install_gperf"
-    chef.add_recipe "walletserver::install_openssl"
-    chef.add_recipe "walletserver::install_protobuf"
-    chef.add_recipe "walletserver::install_bdb"
-    chef.add_recipe "walletserver::install_python3"
+     "walletserver"
+     "walletserver::install_gperf"
+     "walletserver::install_openssl"
+     "walletserver::install_leveldb"
+     "walletserver::install_protobuf"
+     "walletserver::install_bdb"
+     "walletserver::install_python3"
+     "walletserver::install_boost"
+     "coins::setup_bitcoin"
 `
 
 
 Not all recipes are needed by all coins.  The usual critical ones (for Bitcoin or Litecoin) are:
 
 `
-    chef.add_recipe "walletserver"
-    chef.add_recipe "walletserver::install_gperf"
-    chef.add_recipe "walletserver::install_openssl"
-    chef.add_recipe "walletserver::install_bdb"
+     "walletserver"
+     "walletserver::install_gperf"
+     "walletserver::install_openssl"
+     "walletserver::install_leveldb"
+     "walletserver::install_boost"
+     "walletserver::install_bdb"
 `
 
 **Why gperf?**
@@ -39,16 +44,30 @@ Not all recipes are needed by all coins.  The usual critical ones (for Bitcoin o
   I've setup a dependency on the Google Performance Tools for all coins.  This is a hard dependency, but can be removed easily by removing the build references.
 
 
+**Done**
+
+1. bitcoind
+
 **Progress**
 
-bitcoind builds
+Generic builds
 
 **TODO**
 
-1. Fix leveldb build
-2. Move all compile flags to attributes
-3. Setup coin configs
-4. Setup monit for coins.
+1. Move all compile flags to attributes
+2. Setup generic coin configs
+3. Save/Restore wallet.dat to/from S3.
+4. Clustring via pub/sub.
+5. Auto-share addnode logic via cluster.
+
+
+**Controlling Coin Daemons**
+
+Daemons are monitored and controlled via monit:
+
+1. 'monit status' - shows status of daemons
+2. 'monit stop bitcoind' - stops the bitcoind daemon
+3. 'monit start bitcoind' - start the bitcoind daemon
 
 
 Donations:
