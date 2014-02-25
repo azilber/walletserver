@@ -100,6 +100,19 @@ log "Configuring #{node[:coins][:bitcoin][:executable]} with rpc_allow_net=#{nod
     mode 0600
   end
 
+
+  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:bitcoin][:executable]}/wallet.dat" do
+     remote_path "/wallet.dat"
+     bucket node[:coins][:bitcoin][:wallet_s3_bucket]
+     aws_access_key_id node[:coins][:bitcoin][:wallet_s3_key]
+     aws_secret_access_key node[:coins][:bitcoin][:wallet_s3_secret]
+     owner node[:walletserver][:daemon][:user]
+     group node[:walletserver][:daemon][:group]
+     mode 0600
+     action :create
+     only_if { node[:coins][:bitcoin][:wallet_s3_secret] != '' }
+  end
+
   remote_file "#{Chef::Config[:file_cache_path]}/bitcoin.tar.gz" do
          source node[:coins][:bitcoin][:source]
          mode "0644"

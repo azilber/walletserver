@@ -17,7 +17,9 @@
 # limitations under the License.
 #
 
-log "Attempt to install a generic coin into #{node[:walletserver][:root]}"
+#  include_attribute "coins::generic"
+
+log "Install #{node[:coins][:generic][:executable]} into #{node[:walletserver][:root]}"
 
 
   directory "#{node[:walletserver][:root]}/build/generic" do
@@ -32,7 +34,84 @@ log "Attempt to install a generic coin into #{node[:walletserver][:root]}"
     group node[:walletserver][:daemon][:group]
     mode 0644
   end
-    
+
+log "Configuring #{node[:coins][:generic][:executable]} with rpc_allow_net=#{node[:coins][:generic][:rpc_allow_net]}, port #{node[:coins][:generic][:rpc_port]}"
+
+  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:generic][:executable]}.conf" do
+    source "coin.conf.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:generic][:executable],
+       :rpcuser => node[:coins][:generic][:rpc_user],
+       :rpcpass => node[:coins][:generic][:rpc_pass],
+       :rpcnet => node[:coins][:generic][:rpc_allow_net],
+       :rpcport => node[:coins][:generic][:rpc_port]
+    })
+    mode 0600
+  end
+
+
+  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:generic][:executable]}.sh" do
+    source "control-start-default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:generic][:executable],
+       :rpcuser => node[:coins][:generic][:rpc_user],
+       :rpcpass => node[:coins][:generic][:rpc_pass],
+       :rpcport => node[:coins][:generic][:rpc_port]
+    })
+    mode 0700
+  end
+
+  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:generic][:executable]}.sh" do
+    source "control-stop-default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:generic][:executable],
+       :rpcuser => node[:coins][:generic][:rpc_user],
+       :rpcpass => node[:coins][:generic][:rpc_pass],
+       :rpcport => node[:coins][:generic][:rpc_port]
+    })
+    mode 0700
+  end
+
+  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:generic][:executable]}" do
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    mode 0700
+    recursive true
+  end
+
+
+  template "/etc/monit.d/generic.conf" do
+    source "monit_default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:generic][:executable],
+       :coinuser => node[:walletserver][:daemon][:user],
+       :coingroup => node[:walletserver][:daemon][:group],
+       :rpchost => "127.0.0.1",
+       :rpcport => node[:coins][:generic][:rpc_port]
+    })
+    mode 0600
+  end
+
+
+  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:generic][:executable]}/wallet.dat" do
+     remote_path "/wallet.dat"
+     bucket node[:coins][:generic][:wallet_s3_bucket]
+     aws_access_key_id node[:coins][:generic][:wallet_s3_key]
+     aws_secret_access_key node[:coins][:generic][:wallet_s3_secret]
+     owner node[:walletserver][:daemon][:user]
+     group node[:walletserver][:daemon][:group]
+     mode 0600
+     action :create
+     only_if { node[:coins][:generic][:wallet_s3_secret] != '' }
+  end
 
   remote_file "#{Chef::Config[:file_cache_path]}/generic.tar.gz" do
          source node[:coins][:generic][:source]
@@ -40,9 +119,7 @@ log "Attempt to install a generic coin into #{node[:walletserver][:root]}"
          backup false
          action :create_if_missing
          notifies :run, 'bash[setup_generic]', :immediately
-         notifies :run, 'bash[config_generic]', :immediately
-         notifies :run, 'bash[monit_generic]', :immediately
-         notifies :run, 'execute[monit_reload]', :immediately
+         notifies :reload, 'service[monit]', :immediately
   end
 
   bash "setup_generic" do
@@ -63,20 +140,3 @@ log "Attempt to install a generic coin into #{node[:walletserver][:root]}"
     action :nothing
   end
 
-  bash "config_generic" do
-    user "#{node[:walletserver][:daemon][:user]}"
-    code <<-EOH
-
-    echo "config btc"
-    EOH
-    action :nothing
-  end
-
-  bash "monit_generic" do
-    user "#{node[:walletserver][:daemon][:user]}"
-    code <<-EOH
-    
-    echo "monit btc"
-    EOH
-    action :nothing
-  end

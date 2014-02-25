@@ -9,6 +9,7 @@ version          '0.1.0'
 supports 'centos'
 
 depends "walletserver"
+depends "s3_file"
 
 recipe "coins::default", "Sets up and preps for coin installs"
 recipe "coins::setup_bitcoin", "Installs bitcoind"
