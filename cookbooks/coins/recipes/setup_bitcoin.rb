@@ -34,7 +34,71 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
     group node[:walletserver][:daemon][:group]
     mode 0644
   end
-    
+
+log "Configuring #{node[:coins][:bitcoin][:executable]} with rpc_allow_net=#{node[:coins][:bitcoin][:rpc_allow_net]}, port #{node[:coins][:bitcoin][:rpc_port]}"
+
+  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:bitcoin][:executable]}.conf" do
+    source "coin.conf.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:bitcoin][:executable],
+       :rpcuser => node[:coins][:bitcoin][:rpc_user],
+       :rpcpass => node[:coins][:bitcoin][:rpc_pass],
+       :rpcnet => node[:coins][:bitcoin][:rpc_allow_net],
+       :rpcport => node[:coins][:bitcoin][:rpc_port]
+    })
+    mode 0600
+  end
+
+
+  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:bitcoin][:executable]}.sh" do
+    source "control-start-default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:bitcoin][:executable],
+       :rpcuser => node[:coins][:bitcoin][:rpc_user],
+       :rpcpass => node[:coins][:bitcoin][:rpc_pass],
+       :rpcport => node[:coins][:bitcoin][:rpc_port]
+    })
+    mode 0700
+  end
+
+  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:bitcoin][:executable]}.sh" do
+    source "control-stop-default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:bitcoin][:executable],
+       :rpcuser => node[:coins][:bitcoin][:rpc_user],
+       :rpcpass => node[:coins][:bitcoin][:rpc_pass],
+       :rpcport => node[:coins][:bitcoin][:rpc_port]
+    })
+    mode 0700
+  end
+
+  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:bitcoin][:executable]}" do
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    mode 0700
+    recursive true
+  end
+
+
+  template "/etc/monit.d/bitcoin.conf" do
+    source "monit_default.erb"
+    owner node[:walletserver][:daemon][:user]
+    group node[:walletserver][:daemon][:group]
+    variables({
+       :procname => node[:coins][:bitcoin][:executable],
+       :coinuser => node[:walletserver][:daemon][:user],
+       :coingroup => node[:walletserver][:daemon][:group],
+       :rpchost => "127.0.0.1",
+       :rpcport => node[:coins][:bitcoin][:rpc_port]
+    })
+    mode 0600
+  end
 
   remote_file "#{Chef::Config[:file_cache_path]}/bitcoin.tar.gz" do
          source node[:coins][:bitcoin][:source]
@@ -42,9 +106,7 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
          backup false
          action :create_if_missing
          notifies :run, 'bash[setup_bitcoin]', :immediately
-         notifies :run, 'bash[config_bitcoin]', :immediately
-         notifies :run, 'bash[monit_bitcoin]', :immediately
-         notifies :run, 'execute[monit_reload]', :immediately
+         notifies :reload, 'service[monit]', :immediately
   end
 
   bash "setup_bitcoin" do
@@ -65,20 +127,3 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
     action :nothing
   end
 
-  bash "config_bitcoin" do
-    user "#{node[:walletserver][:daemon][:user]}"
-    code <<-EOH
-
-    echo "config btc"
-    EOH
-    action :nothing
-  end
-
-  bash "monit_bitcoin" do
-    user "#{node[:walletserver][:daemon][:user]}"
-    code <<-EOH
-    
-    echo "monit btc"
-    EOH
-    action :nothing
-  end

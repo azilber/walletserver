@@ -6,10 +6,12 @@ description      'Installs/Configures coins'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 
+supports 'centos'
+
 depends "walletserver"
 
-recipe "default", "Sets up and preps for coin installs"
-recipe "setup_bitcoin", "Installs bitcoind"
+recipe "coins::default", "Sets up and preps for coin installs"
+recipe "coins::setup_bitcoin", "Installs bitcoind"
 
 attribute 'coins/generic/source',
  :display_name => "Url of generic coin source",

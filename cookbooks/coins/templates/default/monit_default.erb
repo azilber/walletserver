@@ -1,8 +1,8 @@
-check process <%= @procname %> with pidfile <%= @coinroot %>/run/<%= @procname %>.pid
-   start program = "<%= @coinroot %>/control/start-<%= @procname %>"
+check process <%= @procname %> with pidfile <%= @node[:walletserver][:root] %>/run/<%= @procname %>.pid
+   start program = "<%= @node[:walletserver][:root] %>/control/start-<%= @procname %>.sh"
 	as uid <%= @coinuser %> and gid <%= @coingroup %>
-   stop program = "<%= @coinroot %>/control/stop-<%= @procname %>"
+   stop program = "<%= @node[:walletserver][:root] %>/control/stop-<%= @procname %>.sh"
 	as uid root
-   if failed host 127.0.0.1 port <%= @rpcport %> for 10 cycles then restart
+   if failed host <%= @rpchost %> port <%= @rpcport %> for 10 cycles then restart
    if 5 restarts within 50 cycles then timeout
 group coins

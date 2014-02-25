@@ -1,0 +1,23 @@
+rpcuser=<%= @rpcuser %>
+rpcpassword=<%= @rpcpass %>
+rpcport=<%= @rpcport %>
+rpcconnect=<%= @rpcnet %>
+daemon=1
+server=1
+maxconnections=200
+maxsendbuffer=1000
+maxreceivebuffer=500000
+gen=0
+testnet=0
+listen=1
+keypool=200
+txindex=1
+dns=1
+dnsseed=1
+upnp=0
+checkblocks=1
+checklevel=4
+allowreceivebyip=1
+pid=<%= @node[:walletserver][:root] %>/run/<%= @procname %>.pid
+####addnodes below####
+<%= @addnodes %>
