@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-gem 'rake'
-gem 'foodcritic'
+gem 'rake', '~> 10.1.0'
+gem 'foodcritic', '~> 3.0.0'
 gem 'chef', '~> 11.8.0'
