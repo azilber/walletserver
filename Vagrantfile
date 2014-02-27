@@ -100,7 +100,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :chef_solo do |chef|
     chef.log_level = :debug
     chef.node_name = "wallet"
-    chef.cookbooks_path = "../"
+    chef.cookbooks_path = "cookbooks"
     chef.add_recipe "walletserver"
     chef.add_recipe "walletserver::install_gperf"
     chef.add_recipe "walletserver::install_openssl"
