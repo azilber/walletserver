@@ -1,4 +1,6 @@
-k :default => 'foodcritic'
+#!/usr/bin/env rake
+
+task :default => 'foodcritic'
 
 desc "Runs foodcritic linter"
 task :foodcritic do
