@@ -58,10 +58,7 @@ log "Configuring #{node[:coins][:generic][:executable]} with rpc_allow_net=#{nod
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:generic][:executable],
-       :rpcuser => node[:coins][:generic][:rpc_user],
-       :rpcpass => node[:coins][:generic][:rpc_pass],
-       :rpcport => node[:coins][:generic][:rpc_port]
+       :procname => node[:coins][:generic][:executable]
     })
     mode 0700
   end
@@ -73,8 +70,7 @@ log "Configuring #{node[:coins][:generic][:executable]} with rpc_allow_net=#{nod
     variables({
        :procname => node[:coins][:generic][:executable],
        :rpcuser => node[:coins][:generic][:rpc_user],
-       :rpcpass => node[:coins][:generic][:rpc_pass],
-       :rpcport => node[:coins][:generic][:rpc_port]
+       :rpcpass => node[:coins][:generic][:rpc_pass]
     })
     mode 0700
   end
