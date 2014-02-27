@@ -13,7 +13,7 @@ task :foodcritic do
   end
 end
 
-desc "Runs knife walletserver cookbook test"
+desc "Runs knife walletserver/coins cookbook test"
 task :knife do
   Rake::Task[:prepare_sandbox].execute
 
