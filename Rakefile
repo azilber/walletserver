@@ -7,7 +7,7 @@ task :foodcritic do
   Rake::Task[:prepare_sandbox].execute
 
   if Gem::Version.new("1.9.2") <= Gem::Version.new(RUBY_VERSION.dup)
-    sh "foodcritic -f any #{sandbox_path}"
+    sh "foodcritic -f any #{sandbox_path}/cookbooks/"
   else
     puts "WARN: foodcritic run is skipped as Ruby #{RUBY_VERSION} is < 1.9.2."
   end
@@ -17,20 +17,19 @@ desc "Runs knife walletserver cookbook test"
 task :knife do
   Rake::Task[:prepare_sandbox].execute
 
-  sh "bundle exec knife cookbook test walletserver -c test/.chef/knife.rb -o #{sandbox_path}/../"
-  sh "bundle exec knife cookbook test coins -c test/.chef/knife.rb -o #{sandbox_path}/../"
+  sh "bundle exec knife cookbook test walletserver -c test/.chef/knife.rb -o #{sandbox_path}/cookbooks/"
+  sh "bundle exec knife cookbook test coins -c test/.chef/knife.rb -o #{sandbox_path}/cookbooks/"
 
 end
 
 task :prepare_sandbox do
-  files = %w{*.md *.rb attributes definitions files libraries providers recipes resources templates}
 
   rm_rf sandbox_path
   mkdir_p sandbox_path
-  cp_r Dir.glob("{#{files.join(',')}}"), sandbox_path
+  cp_r Dir.glob("cookbooks"), sandbox_path
 end
 
 private
 def sandbox_path
-  File.join(File.dirname(__FILE__), %w(tmp cookbooks))
+  File.join(File.dirname(__FILE__), "tmp")
 end

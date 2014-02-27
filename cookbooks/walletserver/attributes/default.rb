@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 default[:walletserver][:root] = "/opt/coins"
 default[:walletserver][:daemon][:user] = "coins"
 default[:walletserver][:daemon][:group] = "coins"

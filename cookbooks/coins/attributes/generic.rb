@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 default[:coins][:generic][:source] = ''
 default[:coins][:generic][:executable] = ''
 default[:coins][:generic][:rpc_user] = ''

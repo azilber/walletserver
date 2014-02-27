@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 name             'walletserver'
 maintainer       'Alexey Zilber'
 maintainer_email 'AlexeyZilber@gmail.com'

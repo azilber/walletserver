@@ -1,3 +1,4 @@
+# -*- encoding : utf-8 -*-
 name             'coins'
 maintainer       'Alexey Zilber'
 maintainer_email 'AlexeyZilber@gmail.com'
@@ -13,6 +14,7 @@ depends "s3_file"
 
 recipe "coins::default", "Sets up and preps for coin installs"
 recipe "coins::setup_bitcoin", "Installs bitcoind"
+recipe "coins::test_s3file", "test"
 
 attribute 'coins/generic/source',
  :display_name => "Url of generic coin source",

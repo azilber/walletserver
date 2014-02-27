@@ -1,4 +1,4 @@
-#
+# -*- encoding : utf-8 -*-
 # Cookbook Name:: walletserver
 # Recipe:: install_boost
 #

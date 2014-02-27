@@ -10,4 +10,5 @@ matrix:
   allow_failures:
     - rvm: ruby-head
 script:
+    - bundle exec rake foodcritic
     - bundle exec rake knife
