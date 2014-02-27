@@ -1,5 +1,6 @@
 language: ruby
-script: bundle exec rspec chef
+gemfile:
+  - test/support/Gemfile
 rvm:
   - 1.9.3
   - 2.0.0
@@ -8,3 +9,4 @@ rvm:
 matrix:
   allow_failures:
     - rvm: ruby-head
+script: bundle exec rake foodcritic
