@@ -1,3 +1,7 @@
+# walletserver cookbooks
+
+[![Build Status](https://travis-ci.org/azilber/walletserver.png?branch=master)](https://travis-ci.org/azilber/walletserver)
+
 walletserver
 ============
 
