@@ -7,11 +7,15 @@ description      'Installs/Configures walletserver'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 
+supports 'centos'
+supports 'ubuntu'
+
 depends "yum"
 depends "yum-epel"
 depends "apt"
 
 recipe "walletserver::default", "Sets up and installs the wallet server"
+recipe "walletserver::install_libunwind", "Install libunwind for gperf"
 recipe "walletserver::install_gperf", "Installs the Google Performance tools"
 recipe "walletserver::install_openssl", "Installs openssl"
 recipe "walletserver::install_bdb", "Installs Berkeley DB 4.8"

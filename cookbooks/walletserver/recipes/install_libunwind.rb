@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #
-# Cookbook Name:: gperf
-# Recipe:: default
+# Cookbook Name:: walletserver
+# Recipe:: install_libunwind
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -18,34 +18,30 @@
 # limitations under the License.
 #
 
-log "Install Google Performance Tools into #{node[:walletserver][:root]}"
+log "Install Python 3 into #{node[:walletserver][:root]}"
 
-  directory "#{node[:walletserver][:root]}/build/gperf" do
+  directory "#{node[:walletserver][:root]}/build/libunwind" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/gperf.tar.gz" do
-         source node[:walletserver][:gperf][:source_file]
+  remote_file "#{Chef::Config[:file_cache_path]}/libunwind.tar.gz" do
+         source node[:walletserver][:libunwind][:source_file]
          mode "0755"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[install_gperf]', :immediately
+         notifies :run, 'bash[install_libunwind]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
   end
 
-  bash "install_gperf" do
+  bash "install_libunwind" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
 
-      export LDFLAGS="-lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64"
+      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/libunwind.tar.gz -C #{node[:walletserver][:root]}/build/libunwind/
+      (cd #{node[:walletserver][:root]}/build/libunwind  && ./configure --prefix=#{node[:walletserver][:root]} && make -j2 && make install prefix=#{node[:walletserver][:root]})
 
-      export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I/usr/include"
-
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/gperf.tar.gz -C #{node[:walletserver][:root]}/build/gperf/
-      (cd #{node[:walletserver][:root]}/build/gperf/  && ./configure --prefix=#{node[:walletserver][:root]} && make && make install)
     EOH
     action :nothing
   end
-

@@ -6,6 +6,8 @@
   "maintainer_email": "AlexeyZilber@gmail.com",
   "license": "Apache 2.0",
   "platforms": {
+    "centos": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
   },
   "dependencies": {
     "yum": ">= 0.0.0",
@@ -43,6 +45,7 @@
   },
   "recipes": {
     "walletserver::default": "Sets up and installs the wallet server",
+    "walletserver::install_libunwind": "Install libunwind for gperf",
     "walletserver::install_gperf": "Installs the Google Performance tools",
     "walletserver::install_openssl": "Installs openssl",
     "walletserver::install_bdb": "Installs Berkeley DB 4.8",

@@ -11,3 +11,6 @@ default[:walletserver][:boost][:source_file] = 'http://jaist.dl.sourceforge.net/
 default[:walletserver][:leveldb][:source_file] = 'https://leveldb.googlecode.com/files/leveldb-1.15.0.tar.gz'
 default[:walletserver][:protobuf][:source_file] = 'https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.bz2'
 default[:walletserver][:python3][:source_file] = 'http://www.python.org/ftp/python/3.3.4/Python-3.3.4.tgz'
+default[:walletserver][:libunwind][:source_file] = 'http://download.savannah.gnu.org/releases/libunwind/libunwind-1.1.tar.gz'
+default[:walletserver][:ldflags] = ''
+default[:walletserver][:cppflags] = ''

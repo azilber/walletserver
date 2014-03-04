@@ -27,6 +27,7 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
+    not_if { ::File.directory?("#{node[:walletserver][:root]}/build/bitcoin") }
   end
 
   template "#{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix" do

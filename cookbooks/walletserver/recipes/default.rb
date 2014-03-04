@@ -30,13 +30,15 @@ pversion = node['platform_version'].split('.').first
 
   case node[:platform]
     when "centos", "redhat"
+
        package "yum-plugin-fastestmirror" do
-         action :install
-       end
+           action :install
+           only_if { node[:platform_version].to_f >= 6.0 }
+        end
 
        node.default['yum']['epel']['enabled'] = true
        include_recipe 'yum-epel'
-       %w{gcc-c++ gcc-x86_64-linux-gnu autoconf automake icu monit libunwind libunwind-devel zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
+       %w{gcc-c++ gcc autoconf automake icu monit zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
          package pkg do
            action :install
          end
@@ -46,12 +48,14 @@ pversion = node['platform_version'].split('.').first
        package "python-software-properties" do
           action :install
        end
-
-      package "libterm-readkey-perl" do
+      
+      %w{libterm-readkey-perl build-essential autoconf automake icu monit libunwind libunwind-devel zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
+        package pkg do
           action :install
+        end
       end
 
-   end
+  end
 
 
 Log "Install Wallet Server..."
@@ -64,7 +68,8 @@ Log "Install Wallet Server..."
     comment "#{node[:walletserver][:daemon][:user]} daemon"
     gid "#{node[:walletserver][:daemon][:group]}"
     system true
-    shell "/bin/false"
+    shell "/sbin/nologin"
+    supports(manage_home: false)
     action :create
   end
 
@@ -72,6 +77,7 @@ Log "Install Wallet Server..."
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
+    not_if { ::File.directory?(node[:walletserver][:root]) }
   end
 
   %w{daemons build configs run control data}.each do |cdir|
@@ -79,6 +85,7 @@ Log "Install Wallet Server..."
          owner node[:walletserver][:daemon][:user]
          group node[:walletserver][:daemon][:group]
          recursive true
+         not_if { ::File.directory?("#{node[:walletserver][:root]}/#{cdir}") }
       end
    end
 

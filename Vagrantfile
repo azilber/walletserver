@@ -11,7 +11,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   # Grab the box here: http://www.mediafire.com/download/8fcbxywxngau25w/centos64_x64_chef_11.8.2.box
+  # or here http://www.mediafire.com/download/f722k3423q72k2k/centos5.10-chef_11.10.4-1-64.box
   config.vm.box = "Centos64_Chef_11.8.2"
+  #config.vm.box = "centos5.10-chef_11.10.4-1-64"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -102,6 +104,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.node_name = "wallet"
     chef.cookbooks_path = "cookbooks"
     chef.add_recipe "walletserver"
+    chef.add_recipe "walletserver::install_libunwind"
     chef.add_recipe "walletserver::install_gperf"
     chef.add_recipe "walletserver::install_openssl"
     chef.add_recipe "walletserver::install_leveldb"
