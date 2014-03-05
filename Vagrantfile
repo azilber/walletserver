@@ -103,16 +103,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.log_level = :debug
     chef.node_name = "wallet"
     chef.cookbooks_path = "cookbooks"
-    chef.add_recipe "walletserver"
-    chef.add_recipe "walletserver::install_libunwind"
-    chef.add_recipe "walletserver::install_gperf"
-    chef.add_recipe "walletserver::install_openssl"
-    chef.add_recipe "walletserver::install_leveldb"
-    chef.add_recipe "walletserver::install_protobuf"
-    chef.add_recipe "walletserver::install_bdb"
-    chef.add_recipe "walletserver::install_python3"
-    chef.add_recipe "walletserver::install_boost"
-    chef.add_recipe "coins::setup_bitcoin"
+    chef.roles_path = "roles"
+    # Launch once with the archive role to build libs into AWS S3
+    chef.add_role("archive")
+    # Then launch with only the "coins" role to download the libs from S3 and just build coins.
   end
 
   # Enable provisioning with chef server, specifying the chef server URL,
