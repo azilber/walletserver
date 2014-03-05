@@ -38,7 +38,7 @@ pversion = node['platform_version'].split('.').first
 
        node.default['yum']['epel']['enabled'] = true
        include_recipe 'yum-epel'
-       %w{gcc-c++ gcc autoconf automake icu monit zlib-devel bzip2-devel tcl tcl-devel nasm}.each do |pkg|
+       %w{gcc-c++ gcc autoconf automake icu monit zlib-devel bzip2 bzip2-devel tcl tcl-devel nasm}.each do |pkg|
          package pkg do
            action :install
          end
@@ -97,6 +97,13 @@ Log "Install Wallet Server..."
     EOH
     action :nothing
   end
+
+  execute "clean_build" do
+    cwd "#{node[:walletserver][:root]}/build/"
+    command "rm -Rf ."
+    action :nothing
+  end
+    
 
   cookbook_file "/etc/monit.d/status.conf" do
     source "monit_status.conf"

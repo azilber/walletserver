@@ -14,3 +14,6 @@ default[:walletserver][:python3][:source_file] = 'http://www.python.org/ftp/pyth
 default[:walletserver][:libunwind][:source_file] = 'http://download.savannah.gnu.org/releases/libunwind/libunwind-1.1.tar.gz'
 default[:walletserver][:ldflags] = ''
 default[:walletserver][:cppflags] = ''
+default[:walletserver][:s3_bucket] = 'walletserver'
+default[:s3cmd][:aws_access_key_id] = ''
+default[:s3cmd][:aws_secret_access_key] = ''

@@ -8,12 +8,14 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 
 supports 'centos'
+supports 'ubuntu'
 
 depends "walletserver"
 depends "s3_file"
 
 recipe "coins::default", "Sets up and preps for coin installs"
 recipe "coins::setup_bitcoin", "Installs bitcoind"
+recipe "coins::setup_devcoin", "Installs devcoind"
 recipe "coins::test_s3file", "test"
 
 attribute 'coins/generic/source',
