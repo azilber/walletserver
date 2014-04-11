@@ -6,3 +6,4 @@ cookbooks/yum-epel/
 cookbooks/s3_file/
 .vagrant/*
 roles/private.json
+roles/*

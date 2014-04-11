@@ -4,8 +4,11 @@
 
 
 ***UPDATES***
+
 1. Openssl updated to 1.01g (Heartbleed)
 2. Bitcoin updated to 0.9.1
+3. Devcoin added
+4. Roles will only by partially updated in the future.
 
 walletserver
 ============
@@ -97,6 +100,51 @@ Getting Started
 and bucket name.
 2. Use the 'archive' role.  Allow the boot to properly finish.  You will have an archive of all the libs; 'vagrant up && yes | vagrant destroy'
 3. Use any of the other roles afterwards in future boots that contain the 'walletserver::restore_root' recipe.; then vagrant up
+
+```
+[root@vagrant ~]# monit status
+The Monit daemon 5.1.1 uptime: 34m 
+
+Process 'devcoind'
+  status                            running
+  monitoring status                 monitored
+  pid                               20400
+  parent pid                        1
+  uptime                            25m 
+  children                          0
+  memory kilobytes                  94388
+  memory kilobytes total            94388
+  memory percent                    4.9%
+  memory percent total              4.9%
+  cpu percent                       2.2%
+  cpu percent total                 2.2%
+  port response time                0.000s to 127.0.0.1:53333 [DEFAULT via TCP]
+  data collected                    Sat Apr 12 00:44:40 2014
+
+Process 'bitcoind'
+  status                            running
+  monitoring status                 monitored
+  pid                               19949
+  parent pid                        1
+  uptime                            32m 
+  children                          0
+  memory kilobytes                  89744
+  memory kilobytes total            89744
+  memory percent                    4.6%
+  memory percent total              4.6%
+  cpu percent                       3.5%
+  cpu percent total                 3.5%
+  port response time                0.000s to 127.0.0.1:8332 [DEFAULT via TCP]
+  data collected                    Sat Apr 12 00:44:40 2014
+
+System 'vagrant.localdomain'
+  status                            running
+  monitoring status                 monitored
+  load average                      [0.04] [0.05] [0.11]
+  cpu                               3.4%us 1.2%sy 1.2%wa
+  memory usage                      341544 kB [17.7%]
+  data collected                    Sat Apr 12 00:44:40 2014
+```
 
 
 #####Donations:#####
