@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-default[:coins][:bitcoin][:source] = 'https://bitcoin.org/bin/0.8.6/bitcoin-0.8.6-linux.tar.gz'
+default[:coins][:bitcoin][:source] = 'https://github.com/bitcoin/bitcoin/archive/0.9.1.tar.gz'
 default[:coins][:bitcoin][:executable] = 'bitcoind'
 default[:coins][:bitcoin][:rpc_user] = 'bitcoin'
 default[:coins][:bitcoin][:rpc_pass] = 'bitcoind'

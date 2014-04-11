@@ -13,8 +13,8 @@ BOOST_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include/boost
 BDB_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include
 OPENSSL_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include/openssl
 
-DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH) <%= node[:walletserver][:cppflags] %>) -DNOPCH -DUSE_SSL
-LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH) <%= node[:walletserver][:ldflags] %>)
+DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH)) <%= node[:walletserver][:cppflags] %> -DNOPCH -DUSE_SSL
+LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH)) <%= node[:walletserver][:ldflags] %>
 
 WXINCLUDEPATHS=$(shell wx-config --cxxflags)
 
@@ -30,7 +30,7 @@ LIBS+= \
    -l boost_program_options$(BOOST_LIB_SUFFIX) \
    -l boost_thread$(BOOST_LIB_SUFFIX) \
    -l db_cxx$(BDB_LIB_SUFFIX) \
-   -l ssl -l tcmalloc_minimal \
+   -l ssl \
    -l crypto
 
 ifdef USE_UPNP
@@ -43,7 +43,7 @@ LIBS+= \
    -l gthread-2.0 \
    -l z \
    -l dl \
-   -l pthread -l tcmalloc_minimal \
+   -l pthread \
    -l curl
 
 # Hardening

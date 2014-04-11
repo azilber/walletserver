@@ -38,7 +38,7 @@ pversion = node['platform_version'].split('.').first
 
        node.default['yum']['epel']['enabled'] = true
        include_recipe 'yum-epel'
-       %w{gcc-c++ gcc autoconf automake icu monit zlib-devel bzip2 bzip2-devel tcl tcl-devel nasm}.each do |pkg|
+       %w{gcc-c++ gcc glib2 glib2-devel autoconf automake icu monit zlib-devel bzip2 bzip2-devel tcl tcl-devel nasm}.each do |pkg|
          package pkg do
            action :install
          end
@@ -96,12 +96,14 @@ Log "Install Wallet Server..."
       ldconfig
     EOH
     action :nothing
+    notifies :run, 'execute[clean_build]', :immediately
   end
 
   execute "clean_build" do
     cwd "#{node[:walletserver][:root]}/build/"
-    command "rm -Rf ."
+    command "rm -Rf *"
     action :nothing
+    only_if { node[:walletserver][:clean_build] == "TRUE" }
   end
     
 
@@ -111,6 +113,12 @@ Log "Install Wallet Server..."
     group node[:walletserver][:daemon][:group]
     mode 0644
     action :create
+    notifies :run, 'execute[monit_slowdown]', :immediately
+  end
+
+  execute "monit_slowdown" do
+     command "sed -i -e 's/daemon 60/daemon 300/g' /etc/monit.conf"
+     action :nothing
   end
 
   service "monit" do
@@ -126,5 +134,8 @@ Log "Install Wallet Server..."
     action :create
   end
    
-node.default[:walletserver][:ldflags] = "-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
-node.default[:walletserver][:cppflags] = "-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
+node.default[:walletserver][:ldflags] = "-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -L/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
+node.default[:walletserver][:cppflags] = "-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I#{node[:walletserver][:root]}/include/boost -I/usr/include"
+
+  log "LDFLAGS: #{node.default[:walletserver][:ldflags]}"
+  log "CPPFLAGS: #{node.default[:walletserver][:cppflags]}"

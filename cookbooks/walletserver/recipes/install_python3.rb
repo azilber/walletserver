@@ -34,14 +34,15 @@ log "Install Python 3 into #{node[:walletserver][:root]}"
          notifies :run, 'bash[install_python3]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
          notifies :run, 'bash[install_python3pyp]', :immediately
+         notifies :run, 'execute[clean_build]', :immediately
   end
 
   bash "install_python3" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64 -Wl,-rpath #{node[:walletserver][:root]}/lib"
+      export LDFLAGS="#{node[:walletserver][:ldflags]}"
 
-      export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
+      export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/python3.tar.gz -C #{node[:walletserver][:root]}/build/python3/
       (cd #{node[:walletserver][:root]}/build/python3  && ./configure --prefix=#{node[:walletserver][:root]} --enable-shared --without-universal-archs && make altinstall)

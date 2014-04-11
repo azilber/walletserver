@@ -14,7 +14,6 @@
                 "recipe[walletserver]",
                 "recipe[s3cmd]",
                 "recipe[walletserver::restore_root]",
-		"recipe[coins::setup_bitcoin]",
 		"recipe[coins::setup_devcoin]"
    ],
    "description": "Unarchive the walletserver coin directory to speed up deployments, and build coins.",

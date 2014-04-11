@@ -33,17 +33,18 @@ log "Install openssl into #{node[:walletserver][:root]}"
          action :create_if_missing
          notifies :run, 'bash[install_openssl]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
+         notifies :run, 'execute[clean_build]', :immediately
   end
 
   bash "install_openssl" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="-ltcmalloc_minimal -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64"
-
-      export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/boost -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
+      export CFLAGS="-fPIC"
+      export LDFLAGS="#{node[:walletserver][:ldflags]}"
+      export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/openssl.tar.gz -C #{node[:walletserver][:root]}/build/openssl/
-      (cd #{node[:walletserver][:root]}/build/openssl/  && ./config --prefix=#{node[:walletserver][:root]} zlib enable-camellia enable-seed enable-tlsext enable-rfc3779 enable-cms enable-md2 shared && make depend && make && make install)
+      (cd #{node[:walletserver][:root]}/build/openssl/  && ./config --prefix=#{node[:walletserver][:root]} zlib enable-ec enable-ecdh enable-ecdsa enable-camellia enable-seed enable-tlsext enable-rfc3779 enable-cms enable-md2 enable-ec_nistp_64_gcc_128 shared && make depend && make && make install)
     EOH
     action :nothing
   end

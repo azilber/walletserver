@@ -22,9 +22,8 @@ Log "Archiving build environment"
 
   execute "tar_root" do
     cwd "#{node[:walletserver][:root]}/"
-    command "tar -cjpf /tmp/wallet_root.tar.bz2 ."
+    command "tar -cjpf /tmp/wallet_root.tar.bz2 *"
     only_if { ::File.directory?(node[:walletserver][:root]) }
-    notifies :run, 'execute[clean_build]', :immediately
     notifies :run, 'execute[s3_upload]', :immediately
   end
 

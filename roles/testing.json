@@ -6,26 +6,27 @@
       "aws_secret_access_key": ""
     },
     "walletserver": {
-      "s3_bucket": "walletserver",
-      "clean_build": "TRUE"
+      "s3_bucket": "",
+      "clean_build": "FALSE"
     }
    },
    "json_class": "Chef::Role",
    "run_list": [
                 "recipe[walletserver]",
 		"recipe[s3cmd]",
-                "recipe[walletserver::install_libunwind]",
+		"recipe[walletserver::install_libunwind]",
                 "recipe[walletserver::install_gperf]",
                 "recipe[walletserver::install_openssl]",
                 "recipe[walletserver::install_leveldb]",
                 "recipe[walletserver::install_protobuf]",
                 "recipe[walletserver::install_bdb]",
-		"recipe[walletserver::install_boost]",
-		"recipe[walletserver::install_curl]",
+                "recipe[walletserver::install_curl]",
                 "recipe[walletserver::install_python3]",
-                "recipe[walletserver::archive_root]"
+                "recipe[walletserver::install_boost]",
+		"recipe[coins::setup_bitcoin]",
+                "recipe[coins::setup_devcoin]"
    ],
-   "description": "Archive the walletserver coin directory to speed up deployments.",
+   "description": "Test everything without archiving.",
    "chef_type": "role",
    "override_attributes": {
    }

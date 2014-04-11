@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #
 # Cookbook Name:: walletserver
-# Recipe:: install_protobuf
+# Recipe:: install_curl
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -18,34 +18,33 @@
 # limitations under the License.
 #
 
-log "Install Google Protocol Buffers into #{node[:walletserver][:root]}"
+log "Install Curl into #{node[:walletserver][:root]}"
 
-  directory "#{node[:walletserver][:root]}/build/protobuf" do
+  directory "#{node[:walletserver][:root]}/build/curl" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/protobuf.tar.bz2" do
-         source node[:walletserver][:protobuf][:source_file]
+  remote_file "#{Chef::Config[:file_cache_path]}/curl.tar.gz" do
+         source node[:walletserver][:curl][:source_file]
          mode "0755"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[install_protobuf]', :immediately
+         notifies :run, 'bash[install_curl]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
          notifies :run, 'execute[clean_build]', :immediately
   end
 
-  bash "install_protobuf" do
+  bash "install_curl" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="-ltcmalloc -lunwind -L#{node[:walletserver][:root]}/lib -L/usr/lib64 -L/usr/local/lib64"
+      export LDFLAGS="#{node[:walletserver][:ldflags]}"
+      export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
-      export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/boost -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
+      tar -xjvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/curl.tar.gz -C #{node[:walletserver][:root]}/build/curl/
+      (cd #{node[:walletserver][:root]}/build/curl  && ./configure --prefix=#{node[:walletserver][:root]} --enable-optimize --with-ssl=#{node[:walletserver][:root]}  && make install)
 
-      tar -xjvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/protobuf.tar.bz2 -C #{node[:walletserver][:root]}/build/protobuf/
-      (cd #{node[:walletserver][:root]}/build/protobuf/  && ./configure --prefix=#{node[:walletserver][:root]} --with-zlib && make -j2 && make install)
     EOH
     action :nothing
   end
-

@@ -33,6 +33,7 @@ log "Install Google Performance Tools into #{node[:walletserver][:root]}"
          action :create_if_missing
          notifies :run, 'bash[install_gperf]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
+         notifies :run, 'execute[clean_build]', :immediately
   end
 
   bash "install_gperf" do

@@ -32,6 +32,7 @@ log "Install BOOST Tools into #{node[:walletserver][:root]}"
          action :create_if_missing
          notifies :run, 'bash[install_boost]', :immediately
          notifies :run, 'bash[ldconfig_walletserver]', :immediately
+         notifies :run, 'execute[clean_build]', :immediately
   end
 
   bash "install_boost" do
@@ -41,9 +42,9 @@ log "Install BOOST Tools into #{node[:walletserver][:root]}"
 
       export CPPFLAGS="-I#{node[:walletserver][:root]}/include -I#{node[:walletserver][:root]}/include/boost -I#{node[:walletserver][:root]}/include/google -I#{node[:walletserver][:root]}/include/leveldb -I#{node[:walletserver][:root]}/include/openssl -I/usr/include"
 
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/boost.tar.gz -C #{node[:walletserver][:root]}/build/boost/
+      tar -xjvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/boost.tar.gz -C #{node[:walletserver][:root]}/build/boost/
 #      (cd #{node[:walletserver][:root]}/build/boost  && ./bootstrap.sh --prefix=#{node[:walletserver][:root]} --with-libraries=atomic,chrono,context,coroutine,date_time,exception,filesystem,graph,graph_parallel,iostreams,locale,log,math,mpi,program_options,random,regex,serialization,signals,system,test,thread,timer,wave  && ./b2 install)
-      (cd #{node[:walletserver][:root]}/build/boost  && ./bootstrap.sh --prefix=#{node[:walletserver][:root]} --with-libraries=system,filesystem,chrono,program_options,thread,test && ./b2 stage threading=multi link=shared && ./b2 install threading=multi link=shared -—prefix=#{node[:walletserver][:root]})
+      (cd #{node[:walletserver][:root]}/build/boost  && ./bootstrap.sh --prefix=#{node[:walletserver][:root]} --with-libraries=system,filesystem,chrono,program_options,thread,test && ./b2 stage threading=multi link=static,shared && ./b2 install threading=multi link=static,shared -—prefix=#{node[:walletserver][:root]})
     EOH
     action :nothing
   end

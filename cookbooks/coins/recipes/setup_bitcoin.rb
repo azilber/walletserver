@@ -30,13 +30,6 @@ log "Install #{node[:coins][:bitcoin][:executable]} into #{node[:walletserver][:
     not_if { ::File.directory?("#{node[:walletserver][:root]}/build/bitcoin") }
   end
 
-  template "#{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix" do
-    source "makefile.bitcoin.unix.erb"
-    owner node[:walletserver][:daemon][:user]
-    group node[:walletserver][:daemon][:group]
-    mode 0644
-  end
-
 log "Configuring #{node[:coins][:bitcoin][:executable]} with rpc_allow_net=#{node[:coins][:bitcoin][:rpc_allow_net]}, port #{node[:coins][:bitcoin][:rpc_port]}"
 
   template "#{node[:walletserver][:root]}/configs/#{node[:coins][:bitcoin][:executable]}.conf" do
@@ -123,16 +116,22 @@ log "Configuring #{node[:coins][:bitcoin][:executable]} with rpc_allow_net=#{nod
   bash "setup_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="#{node[:walletserver][:ldflags]}"
-
+      export LDFLAGS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
       export CPPFLAGS="#{node[:walletserver][:cppflags]}"
+      export PROTOBUF_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+      export CRYPTO_CFLAGS="#{node[:walletserver][:cppflags]}"
+      export PROTOBUF_CFLAGS="#{node[:walletserver][:cppflags]}"
+      export CRYPTO_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+      export SSL_CFLAGS="#{node[:walletserver][:cppflags]}"
+      export SSL_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/bitcoin.tar.gz -C #{node[:walletserver][:root]}/build/bitcoin/
-      (cd #{node[:walletserver][:root]}/build/bitcoin/src/src  && make -f #{node[:walletserver][:root]}/build/bitcoin/makefile.bitcoin.unix )
+      (cd #{node[:walletserver][:root]}/build/bitcoin  && ./autogen.sh && ./configure --disable-tests --without-gui --with-boost=#{node[:walletserver][:root]}/include/boost --with-boost-libdir=#{node[:walletserver][:root]}/lib && make )
 
-      strip #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]}
+      strip #{node[:walletserver][:root]}/build/bitcoin/src/#{node[:coins][:bitcoin][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/bitcoin/src/src/#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/bitcoin/src/#{node[:coins][:bitcoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing

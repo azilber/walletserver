@@ -52,7 +52,6 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
     mode 0600
   end
 
-
   template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:devcoin][:executable]}.sh" do
     source "control-start-default.erb"
     owner node[:walletserver][:daemon][:user]
@@ -127,11 +126,11 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
       export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/devcoin.tar.gz -C #{node[:walletserver][:root]}/build/devcoin/
-      (cd #{node[:walletserver][:root]}/build/devcoin/src/src  && make -f #{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix )
+      (cd #{node[:walletserver][:root]}/build/devcoin/src  && make -f #{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix )
 
-      strip #{node[:walletserver][:root]}/build/devcoin/src/src/#{node[:coins][:devcoin][:executable]}
+      strip #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/devcoin/src/src/#{node[:coins][:devcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing

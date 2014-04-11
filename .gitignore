@@ -1,6 +1,8 @@
-*/metadata.json
+metadata.json
 cookbooks/apt/
 cookbooks/yum/
+cookbooks/s3cmd/
 cookbooks/yum-epel/
 cookbooks/s3_file/
 .vagrant/*
+roles/private.json
