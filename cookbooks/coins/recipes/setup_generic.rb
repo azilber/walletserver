@@ -123,15 +123,21 @@ log "Configuring #{node[:coins][:generic][:executable]} with rpc_allow_net=#{nod
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
       export LDFLAGS="#{node[:walletserver][:ldflags]}"
-
       export CPPFLAGS="#{node[:walletserver][:cppflags]}"
 
+      export BOOST_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export BDB_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export OPENSSL_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export BOOST_INCLUDE_PATH="#{node[:walletserver][:root]}/include/boost"
+      export BDB_INCLUDE_PATH="#{node[:walletserver][:root]}/include"
+      export OPENSSL_INCLUDE_PATH="#{node[:walletserver][:root]}/include/openssl"
+
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/generic.tar.gz -C #{node[:walletserver][:root]}/build/generic/
-      (cd #{node[:walletserver][:root]}/build/generic/src/src  && make -f #{node[:walletserver][:root]}/build/generic/makefile.generic.unix )
+      (cd #{node[:walletserver][:root]}/build/generic/src  && make -f #{node[:walletserver][:root]}/build/generic/makefile.generic.unix )
 
-      strip #{node[:walletserver][:root]}/build/generic/src/src/#{node[:coins][:generic][:executable]}
+      strip #{node[:walletserver][:root]}/build/generic/src/#{node[:coins][:generic][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/generic/src/src/#{node[:coins][:generic][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/generic/src/#{node[:coins][:generic][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing

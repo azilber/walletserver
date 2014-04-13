@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #
 # Cookbook Name:: coins
-# Recipe:: setup_devcoin
+# Recipe:: setup_litecoin
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -18,63 +18,64 @@
 # limitations under the License.
 #
 
-#  include_attribute "coins::devcoin"
+#  include_attribute "coins::litecoin"
 
-log "Install #{node[:coins][:devcoin][:executable]} into #{node[:walletserver][:root]}"
+log "Install #{node[:coins][:litecoin][:executable]} into #{node[:walletserver][:root]}"
 
 
-  directory "#{node[:walletserver][:root]}/build/devcoin" do
+  directory "#{node[:walletserver][:root]}/build/litecoin" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  template "#{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix" do
-    source "makefile.devcoin.unix.erb"
+  template "#{node[:walletserver][:root]}/build/litecoin/makefile.litecoin.unix" do
+    source "makefile.litecoin.unix.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     mode 0644
   end
 
-log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{node[:coins][:devcoin][:rpc_allow_net]}, port #{node[:coins][:devcoin][:rpc_port]}"
+log "Configuring #{node[:coins][:litecoin][:executable]} with rpc_allow_net=#{node[:coins][:litecoin][:rpc_allow_net]}, port #{node[:coins][:litecoin][:rpc_port]}"
 
-  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:devcoin][:executable]}.conf" do
+  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:litecoin][:executable]}.conf" do
     source "coin.conf.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
-       :rpcuser => node[:coins][:devcoin][:rpc_user],
-       :rpcpass => node[:coins][:devcoin][:rpc_pass],
-       :rpcnet => node[:coins][:devcoin][:rpc_allow_net],
-       :rpcport => node[:coins][:devcoin][:rpc_port]
+       :procname => node[:coins][:litecoin][:executable],
+       :rpcuser => node[:coins][:litecoin][:rpc_user],
+       :rpcpass => node[:coins][:litecoin][:rpc_pass],
+       :rpcnet => node[:coins][:litecoin][:rpc_allow_net],
+       :rpcport => node[:coins][:litecoin][:rpc_port]
     })
     mode 0600
   end
 
-  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:devcoin][:executable]}.sh" do
+
+  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:litecoin][:executable]}.sh" do
     source "control-start-default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable]
+       :procname => node[:coins][:litecoin][:executable]
     })
     mode 0700
   end
 
-  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:devcoin][:executable]}.sh" do
+  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:litecoin][:executable]}.sh" do
     source "control-stop-default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
-       :rpcuser => node[:coins][:devcoin][:rpc_user],
-       :rpcpass => node[:coins][:devcoin][:rpc_pass]
+       :procname => node[:coins][:litecoin][:executable],
+       :rpcuser => node[:coins][:litecoin][:rpc_user],
+       :rpcpass => node[:coins][:litecoin][:rpc_pass]
     })
     mode 0700
   end
 
-  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:devcoin][:executable]}" do
+  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:litecoin][:executable]}" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     mode 0700
@@ -82,43 +83,43 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
   end
 
 
-  template "/etc/monit.d/devcoin.conf" do
+  template "/etc/monit.d/litecoin.conf" do
     source "monit_default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
+       :procname => node[:coins][:litecoin][:executable],
        :coinuser => node[:walletserver][:daemon][:user],
        :coingroup => node[:walletserver][:daemon][:group],
        :rpchost => "127.0.0.1",
-       :rpcport => node[:coins][:devcoin][:rpc_port]
+       :rpcport => node[:coins][:litecoin][:rpc_port]
     })
     mode 0600
   end
 
 
-  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:devcoin][:executable]}/wallet.dat" do
+  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:litecoin][:executable]}/wallet.dat" do
      remote_path "/wallet.dat"
-     bucket node[:coins][:devcoin][:wallet_s3_bucket]
-     aws_access_key_id node[:coins][:devcoin][:wallet_s3_key]
-     aws_secret_access_key node[:coins][:devcoin][:wallet_s3_secret]
+     bucket node[:coins][:litecoin][:wallet_s3_bucket]
+     aws_access_key_id node[:coins][:litecoin][:wallet_s3_key]
+     aws_secret_access_key node[:coins][:litecoin][:wallet_s3_secret]
      owner node[:walletserver][:daemon][:user]
      group node[:walletserver][:daemon][:group]
      mode 0600
      action :create
-     only_if { node[:coins][:devcoin][:wallet_s3_secret] != '' }
+     only_if { node[:coins][:litecoin][:wallet_s3_secret] != '' }
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/devcoin.tar.gz" do
-         source node[:coins][:devcoin][:source]
+  remote_file "#{Chef::Config[:file_cache_path]}/litecoin.tar.gz" do
+         source node[:coins][:litecoin][:source]
          mode "0644"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[setup_devcoin]', :immediately
+         notifies :run, 'bash[setup_litecoin]', :immediately
          notifies :reload, 'service[monit]', :immediately
   end
 
-  bash "setup_devcoin" do
+  bash "setup_litecoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
       export LDFLAGS="#{node[:walletserver][:ldflags]}"
@@ -131,12 +132,12 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
       export BDB_INCLUDE_PATH="#{node[:walletserver][:root]}/include"
       export OPENSSL_INCLUDE_PATH="#{node[:walletserver][:root]}/include/openssl"
 
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/devcoin.tar.gz -C #{node[:walletserver][:root]}/build/devcoin/
-      (cd #{node[:walletserver][:root]}/build/devcoin/src  && make -f #{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix )
+      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/litecoin.tar.gz -C #{node[:walletserver][:root]}/build/litecoin/
+      (cd #{node[:walletserver][:root]}/build/litecoin/src  && make -f #{node[:walletserver][:root]}/build/litecoin/makefile.litecoin.unix )
 
-      strip #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]}
+      strip #{node[:walletserver][:root]}/build/litecoin/src/#{node[:coins][:litecoin][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/litecoin/src/#{node[:coins][:litecoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing

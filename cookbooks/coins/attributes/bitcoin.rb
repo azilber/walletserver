@@ -2,7 +2,7 @@
 default[:coins][:bitcoin][:source] = 'https://github.com/bitcoin/bitcoin/archive/0.9.1.tar.gz'
 default[:coins][:bitcoin][:executable] = 'bitcoind'
 default[:coins][:bitcoin][:rpc_user] = 'bitcoin'
-default[:coins][:bitcoin][:rpc_pass] = 'bitcoind'
+default[:coins][:bitcoin][:rpc_pass] = '9aPXHYaWCqQ54FYXMBuKVsxQd2JoGgq7HunxDTt9mmQX'
 default[:coins][:bitcoin][:rpc_port] = '8332'
 default[:coins][:bitcoin][:rpc_allow_net] = '127.0.0.1'
 default[:coins][:bitcoin][:wallet_location] = 'S3'

@@ -6,13 +6,6 @@ CXX=g++
 
 DEFS=-DUSE_IPV6 -DBOOST_SPIRIT_THREADSAFE
 
-BOOST_LIB_PATH=<%= node[:walletserver][:root] %>/lib
-BDB_LIB_PATH=<%= node[:walletserver][:root] %>/lib
-OPENSSL_LIB_PATH=<%= node[:walletserver][:root] %>/openssl/lib
-BOOST_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include/boost
-BDB_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include
-OPENSSL_INCLUDE_PATH=<%= node[:walletserver][:root] %>/include/openssl
-
 DEFS += $(addprefix -I,$(CURDIR) $(CURDIR)/obj $(BOOST_INCLUDE_PATH) $(BDB_INCLUDE_PATH) $(OPENSSL_INCLUDE_PATH)) <%= node[:walletserver][:cppflags] %> -DNOPCH -DUSE_SSL
 LIBS = $(addprefix -L,$(BOOST_LIB_PATH) $(BDB_LIB_PATH) $(OPENSSL_LIB_PATH)) <%= node[:walletserver][:ldflags] %>
 

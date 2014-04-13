@@ -5,10 +5,7 @@
 
 ***UPDATES***
 
-1. Openssl updated to 1.01g (Heartbleed)
-2. Bitcoin updated to 0.9.1
-3. Devcoin added
-4. Roles will only by partially updated in the future.
+1. Litecoin added
 
 walletserver
 ============
@@ -63,7 +60,9 @@ Done
 
 1. bitcoind
 2. devcoind
-2. Restore wallet.dat from S3 bucket.
+3. dogecoind
+4. litecoind
+5. Restore wallet.dat from S3 bucket.
 
 
 Current Progress
@@ -76,7 +75,7 @@ TODO
 
 1. Move all compile flags to attributes - Mostly done.
 2. Setup generic coin configs. - Partly done
-3. Save wallet.dat to S3. - done
+3. Save wallet.dat to S3 automatically.
 4. Clustring via pub/sub.
 5. Auto-share addnode logic via cluster.
 6. Actual Ubuntu support

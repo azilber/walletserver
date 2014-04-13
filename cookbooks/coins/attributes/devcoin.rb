@@ -2,7 +2,7 @@
 default[:coins][:devcoin][:source] = 'https://gitorious.org/devcoin/devcoin/archive/4e23c180945785c49bbab682b7f6c6e1eda29b05.tar.gz'
 default[:coins][:devcoin][:executable] = 'devcoind'
 default[:coins][:devcoin][:rpc_user] = 'devcoin'
-default[:coins][:devcoin][:rpc_pass] = 'devcoind'
+default[:coins][:devcoin][:rpc_pass] = '9aPXHYaWCqQ54FYXMBuKVsxQd2JoGgq7HunxDTt9mmQX'
 default[:coins][:devcoin][:rpc_port] = '53333'
 default[:coins][:devcoin][:rpc_allow_net] = '127.0.0.1'
 default[:coins][:devcoin][:wallet_location] = 'S3'

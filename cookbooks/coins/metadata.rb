@@ -16,6 +16,8 @@ depends "s3_file"
 recipe "coins::default", "Sets up and preps for coin installs"
 recipe "coins::setup_bitcoin", "Installs bitcoind"
 recipe "coins::setup_devcoin", "Installs devcoind"
+recipe "coins::setup_dogecoin", "Install some Shibe"
+recipe "coins::setup_litecoin", "Installs litecoin"
 recipe "coins::test_s3file", "test"
 
 attribute 'coins/generic/source',

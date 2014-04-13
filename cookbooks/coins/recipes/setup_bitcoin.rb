@@ -116,14 +116,22 @@ log "Configuring #{node[:coins][:bitcoin][:executable]} with rpc_allow_net=#{nod
   bash "setup_bitcoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
-      export LDFLAGS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+
+      export LDFLAGS="#{node[:walletserver][:ldflags]}"
       export CPPFLAGS="#{node[:walletserver][:cppflags]}"
-      export PROTOBUF_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+      export PROTOBUF_LIBS="#{node[:walletserver][:ldflags]}"
       export CRYPTO_CFLAGS="#{node[:walletserver][:cppflags]}"
       export PROTOBUF_CFLAGS="#{node[:walletserver][:cppflags]}"
-      export CRYPTO_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+      export CRYPTO_LIBS="#{node[:walletserver][:ldflags]}"
       export SSL_CFLAGS="#{node[:walletserver][:cppflags]}"
-      export SSL_LIBS="-lssl -lcrypto #{node[:walletserver][:ldflags]}"
+      export SSL_LIBS="#{node[:walletserver][:ldflags]}"
+
+      export BOOST_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export BDB_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export OPENSSL_LIB_PATH="#{node[:walletserver][:root]}/lib"
+      export BOOST_INCLUDE_PATH="#{node[:walletserver][:root]}/include/boost"
+      export BDB_INCLUDE_PATH="#{node[:walletserver][:root]}/include"
+      export OPENSSL_INCLUDE_PATH="#{node[:walletserver][:root]}/include/openssl"
 
 
       tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/bitcoin.tar.gz -C #{node[:walletserver][:root]}/build/bitcoin/

@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 #
 # Cookbook Name:: coins
-# Recipe:: setup_devcoin
+# Recipe:: setup_dogecoin
 #
 # Copyright 2014, Alexey Zilber
 #
@@ -18,63 +18,64 @@
 # limitations under the License.
 #
 
-#  include_attribute "coins::devcoin"
+#  include_attribute "coins::dogecoin"
 
-log "Install #{node[:coins][:devcoin][:executable]} into #{node[:walletserver][:root]}"
+log "Install #{node[:coins][:dogecoin][:executable]} into #{node[:walletserver][:root]}"
 
 
-  directory "#{node[:walletserver][:root]}/build/devcoin" do
+  directory "#{node[:walletserver][:root]}/build/dogecoin" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     recursive true
   end
 
-  template "#{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix" do
-    source "makefile.devcoin.unix.erb"
+  template "#{node[:walletserver][:root]}/build/dogecoin/makefile.dogecoin.unix" do
+    source "makefile.dogecoin.unix.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     mode 0644
   end
 
-log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{node[:coins][:devcoin][:rpc_allow_net]}, port #{node[:coins][:devcoin][:rpc_port]}"
+log "Configuring #{node[:coins][:dogecoin][:executable]} with rpc_allow_net=#{node[:coins][:dogecoin][:rpc_allow_net]}, port #{node[:coins][:dogecoin][:rpc_port]}"
 
-  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:devcoin][:executable]}.conf" do
+  template "#{node[:walletserver][:root]}/configs/#{node[:coins][:dogecoin][:executable]}.conf" do
     source "coin.conf.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
-       :rpcuser => node[:coins][:devcoin][:rpc_user],
-       :rpcpass => node[:coins][:devcoin][:rpc_pass],
-       :rpcnet => node[:coins][:devcoin][:rpc_allow_net],
-       :rpcport => node[:coins][:devcoin][:rpc_port]
+       :procname => node[:coins][:dogecoin][:executable],
+       :rpcuser => node[:coins][:dogecoin][:rpc_user],
+       :rpcpass => node[:coins][:dogecoin][:rpc_pass],
+       :rpcnet => node[:coins][:dogecoin][:rpc_allow_net],
+       :rpcport => node[:coins][:dogecoin][:rpc_port]
     })
     mode 0600
   end
 
-  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:devcoin][:executable]}.sh" do
+
+  template "#{node[:walletserver][:root]}/control/start-#{node[:coins][:dogecoin][:executable]}.sh" do
     source "control-start-default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable]
+       :procname => node[:coins][:dogecoin][:executable]
     })
     mode 0700
   end
 
-  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:devcoin][:executable]}.sh" do
+  template "#{node[:walletserver][:root]}/control/stop-#{node[:coins][:dogecoin][:executable]}.sh" do
     source "control-stop-default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
-       :rpcuser => node[:coins][:devcoin][:rpc_user],
-       :rpcpass => node[:coins][:devcoin][:rpc_pass]
+       :procname => node[:coins][:dogecoin][:executable],
+       :rpcuser => node[:coins][:dogecoin][:rpc_user],
+       :rpcpass => node[:coins][:dogecoin][:rpc_pass]
     })
     mode 0700
   end
 
-  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:devcoin][:executable]}" do
+  directory "#{node[:walletserver][:root]}/data/#{node[:coins][:dogecoin][:executable]}" do
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     mode 0700
@@ -82,43 +83,43 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
   end
 
 
-  template "/etc/monit.d/devcoin.conf" do
+  template "/etc/monit.d/dogecoin.conf" do
     source "monit_default.erb"
     owner node[:walletserver][:daemon][:user]
     group node[:walletserver][:daemon][:group]
     variables({
-       :procname => node[:coins][:devcoin][:executable],
+       :procname => node[:coins][:dogecoin][:executable],
        :coinuser => node[:walletserver][:daemon][:user],
        :coingroup => node[:walletserver][:daemon][:group],
        :rpchost => "127.0.0.1",
-       :rpcport => node[:coins][:devcoin][:rpc_port]
+       :rpcport => node[:coins][:dogecoin][:rpc_port]
     })
     mode 0600
   end
 
 
-  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:devcoin][:executable]}/wallet.dat" do
+  s3_file "#{node[:walletserver][:root]}/data/#{node[:coins][:dogecoin][:executable]}/wallet.dat" do
      remote_path "/wallet.dat"
-     bucket node[:coins][:devcoin][:wallet_s3_bucket]
-     aws_access_key_id node[:coins][:devcoin][:wallet_s3_key]
-     aws_secret_access_key node[:coins][:devcoin][:wallet_s3_secret]
+     bucket node[:coins][:dogecoin][:wallet_s3_bucket]
+     aws_access_key_id node[:coins][:dogecoin][:wallet_s3_key]
+     aws_secret_access_key node[:coins][:dogecoin][:wallet_s3_secret]
      owner node[:walletserver][:daemon][:user]
      group node[:walletserver][:daemon][:group]
      mode 0600
      action :create
-     only_if { node[:coins][:devcoin][:wallet_s3_secret] != '' }
+     only_if { node[:coins][:dogecoin][:wallet_s3_secret] != '' }
   end
 
-  remote_file "#{Chef::Config[:file_cache_path]}/devcoin.tar.gz" do
-         source node[:coins][:devcoin][:source]
+  remote_file "#{Chef::Config[:file_cache_path]}/dogecoin.tar.gz" do
+         source node[:coins][:dogecoin][:source]
          mode "0644"
          backup false
          action :create_if_missing
-         notifies :run, 'bash[setup_devcoin]', :immediately
+         notifies :run, 'bash[setup_dogecoin]', :immediately
          notifies :reload, 'service[monit]', :immediately
   end
 
-  bash "setup_devcoin" do
+  bash "setup_dogecoin" do
     user "#{node[:walletserver][:daemon][:user]}"
     code <<-EOH
       export LDFLAGS="#{node[:walletserver][:ldflags]}"
@@ -131,12 +132,12 @@ log "Configuring #{node[:coins][:devcoin][:executable]} with rpc_allow_net=#{nod
       export BDB_INCLUDE_PATH="#{node[:walletserver][:root]}/include"
       export OPENSSL_INCLUDE_PATH="#{node[:walletserver][:root]}/include/openssl"
 
-      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/devcoin.tar.gz -C #{node[:walletserver][:root]}/build/devcoin/
-      (cd #{node[:walletserver][:root]}/build/devcoin/src  && make -f #{node[:walletserver][:root]}/build/devcoin/makefile.devcoin.unix )
+      tar -xzvp --strip-components 1 -f #{Chef::Config[:file_cache_path]}/dogecoin.tar.gz -C #{node[:walletserver][:root]}/build/dogecoin/
+      (cd #{node[:walletserver][:root]}/build/dogecoin/src  && make -f #{node[:walletserver][:root]}/build/dogecoin/makefile.dogecoin.unix )
 
-      strip #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]}
+      strip #{node[:walletserver][:root]}/build/dogecoin/src/#{node[:coins][:dogecoin][:executable]}
 
-      mv -f #{node[:walletserver][:root]}/build/devcoin/src/#{node[:coins][:devcoin][:executable]} #{node[:walletserver][:root]}/daemons/
+      mv -f #{node[:walletserver][:root]}/build/dogecoin/src/#{node[:coins][:dogecoin][:executable]} #{node[:walletserver][:root]}/daemons/
 
     EOH
     action :nothing
