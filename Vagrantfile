@@ -111,7 +111,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #chef.add_role("dogecoin")
     chef.add_recipe "walletserver"
     #chef.add_recipe "coins::setup_dogecoin"
-     chef.add_recipe "coins::setup_litecoin"
+    #chef.add_recipe "coins::setup_litecoin"
+    chef.add_recipe "coins::setup_blackcoin"
     ##chef.add_role("testing")
     # Then launch with only the "coins" role to download the libs from S3 and just build coins.
   end

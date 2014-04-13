@@ -5,7 +5,8 @@
 
 ***UPDATES***
 
-1. Litecoin added
+1. Blackcoin added
+2. Fixes/cleanup
 
 walletserver
 ============
