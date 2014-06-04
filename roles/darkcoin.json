@@ -1,0 +1,23 @@
+{
+  "name": "coins",
+  "default_attributes": {
+    "s3cmd": {
+      "aws_access_key_id": "",
+      "aws_secret_access_key": ""
+    },
+    "walletserver": {
+      "s3_bucket": ""
+    }
+   },
+   "json_class": "Chef::Role",
+   "run_list": [
+                "recipe[walletserver]",
+                "recipe[s3cmd]",
+                "recipe[walletserver::restore_root]",
+		"recipe[coins::setup_darkcoin]"
+   ],
+   "description": "Unarchive the walletserver coin directory to speed up deployments, and build coins.",
+   "chef_type": "role",
+   "override_attributes": {
+   }
+}

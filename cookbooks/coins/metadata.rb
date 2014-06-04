@@ -19,6 +19,7 @@ recipe "coins::setup_devcoin", "Installs devcoind"
 recipe "coins::setup_dogecoin", "Install some Shibe"
 recipe "coins::setup_litecoin", "Installs litecoin"
 recipe "coins::setup_blackcoin", "Installs blackcoin"
+recipe "coins::setup_darkcoin", "Installs darkcoin"
 recipe "coins::test_s3file", "test"
 
 attribute 'coins/generic/source',

@@ -5,8 +5,8 @@
 
 ***UPDATES***
 
-1. Blackcoin added
-2. Fixes/cleanup
+1. Darkcoin added
+2. Updates
 
 walletserver
 ============
@@ -63,7 +63,9 @@ Done
 2. devcoind
 3. dogecoind
 4. litecoind
-5. Restore wallet.dat from S3 bucket.
+5. darkcoin
+6. blackcoin
+7. Restore wallet.dat from S3 bucket.
 
 
 Current Progress
@@ -146,6 +148,10 @@ System 'vagrant.localdomain'
   data collected                    Sat Apr 12 00:44:40 2014
 ```
 
+Provisioning
+______________
+
+We now require ```vagrant plugin install vagrant-omnibus``` as well as your provisioner of choice.  We target Chef >= 11.8
 
 #####Donations:#####
 
@@ -154,5 +160,6 @@ System 'vagrant.localdomain'
 * DVC: 12VfaJToeCxRAU36bWfehBBooLeBaKx4tP 
 * LTC: LT56PMhz16szVk3RFGB9ASfuYtQJuSRS8p
 * TES: 5pVjo5M1rZRqGatTXefT6dVTKP1zo66nBS
+* DRK: XhV881d8r3ucuV1iLAyhgGB1LYzXnkYjaS
 
 
