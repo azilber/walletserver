@@ -10,3 +10,6 @@
 [submodule "cookbooks/s3cmd"]
 	path = cookbooks/s3cmd
 	url = https://github.com/azilber/s3cmd.git
+[submodule "cookbooks/s3_file"]
+	path = cookbooks/s3_file
+	url = https://github.com/adamsb6/s3_file.git

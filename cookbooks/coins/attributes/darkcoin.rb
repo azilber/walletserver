@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-default[:coins][:darkcoin][:source] = 'https://github.com/darkcoinproject/darkcoin/archive/v0.9.5.1.tar.gz'
+default[:coins][:darkcoin][:source] = 'https://github.com/darkcoinproject/darkcoin/archive/v0.11.1.25.tar.gz'
 default[:coins][:darkcoin][:executable] = 'darkcoind'
 default[:coins][:darkcoin][:rpc_user] = 'darkcoin'
 default[:coins][:darkcoin][:rpc_pass] = '9aPXHYaWCqQ54FYXMBuKVsxQd2JoGgq7HunxDTt9mmQX'
