@@ -5,8 +5,7 @@
 
 ***UPDATES***
 
-1. Darkcoin added
-2. Updates
+This branch is DASH only.  https://www.dashpay.io/
 
 walletserver
 ============
@@ -35,7 +34,7 @@ Recipes
      "walletserver::install_bdb"
      "walletserver::install_python3"
      "walletserver::install_boost"
-     "coins::setup_bitcoin"
+     "coins::setup_dash"
 ```
 
 
@@ -59,19 +58,14 @@ Why gperf?
 Done
 -----------
 
-1. bitcoind
-2. devcoind
-3. dogecoind
-4. litecoind
-5. darkcoin
-6. blackcoin
+1. DASH
 7. Restore wallet.dat from S3 bucket.
 
 
 Current Progress
 -----------
 
-Generic builds
+Masternodes.
 
 TODO
 -----------
@@ -91,8 +85,8 @@ Controlling Coin Daemons
 Daemons are monitored and controlled via monit:
 
 1. 'monit status' - shows status of daemons
-2. 'monit stop bitcoind' - stops the bitcoind daemon
-3. 'monit start bitcoind' - start the bitcoind daemon
+2. 'monit stop dashd' - stops the dashd daemon
+3. 'monit start dashd' - start the dashd daemon
 
 
 Getting Started
@@ -123,7 +117,7 @@ Process 'devcoind'
   port response time                0.000s to 127.0.0.1:53333 [DEFAULT via TCP]
   data collected                    Sat Apr 12 00:44:40 2014
 
-Process 'bitcoind'
+Process 'dashd'
   status                            running
   monitoring status                 monitored
   pid                               19949
