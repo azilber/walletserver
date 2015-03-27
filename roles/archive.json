@@ -2,8 +2,8 @@
   "name": "archive",
   "default_attributes": {
     "s3cmd": {
-      "aws_access_key_id": "",
-      "aws_secret_access_key": ""
+      "aws_access_key_id": "AKIAIZD3HYUE4HCRH7LA",
+      "aws_secret_access_key": "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"
     },
     "walletserver": {
       "s3_bucket": "walletserver",

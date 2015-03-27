@@ -105,11 +105,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.cookbooks_path = "cookbooks"
     chef.roles_path = "roles"
     # Launch once with the archive role to build libs into AWS S3
-    chef.add_role("archive")
+    #chef.add_role("private")
+    chef.add_role("dev")
+    #chef.add_role("archive")
     #chef.add_role("coins")
-    #chef.add_role("devcoin")
-    #chef.add_role("dogecoin")
-    #chef.add_role("blackcoin")
     #chef.add_role("darkcoin")
     #chef.add_recipe "walletserver"
     #chef.add_recipe "coins::setup_dogecoin"
